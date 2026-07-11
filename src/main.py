@@ -603,6 +603,18 @@ async def health_check():
 async def http_graph_inout_parameter(request: Request):
     return service.graph_inout_schema()
 
+
+# ============ Agent-Engine 路由注册 ============
+try:
+    from agents.engine import register_agent_engine_routes, init_agent_engine
+    register_agent_engine_routes(app)
+    init_agent_engine()
+    logger.info("Agent-Engine routes registered successfully")
+except Exception as _ae_err:
+    logger.warning(f"Agent-Engine route registration skipped: {_ae_err}")
+# ============ Agent-Engine 路由注册 END ============
+
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Start FastAPI server")
     parser.add_argument("-m", type=str, default="http", help="Run mode, support http,flow,node")
