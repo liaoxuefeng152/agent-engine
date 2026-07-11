@@ -173,6 +173,17 @@ class RAGEngine:
             self._stores[kb_id] = VectorStore(kb_id, self._dimension)
         return self._stores[kb_id]
 
+    def list_available_bases(self) -> List[Dict]:
+        """列出所有已加载的知识库"""
+        result = []
+        for kb_id, store in self._stores.items():
+            result.append({
+                "id": kb_id,
+                "name": kb_id,
+                "doc_count": store.index.ntotal if store.index is not None else 0,
+            })
+        return result
+
     def load_knowledge_base(self, kb_id: str, documents: List[Dict]):
         """加载/更新知识库文档"""
         store = self.get_or_create_store(kb_id)
